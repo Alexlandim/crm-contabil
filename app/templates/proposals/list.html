@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Propostas</h2>
+  <a href="/proposals/new" class="btn btn-dark">Nova proposta</a>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Cliente</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Versão</th>
+          <th style="width: 240px;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in proposals %}
+        <tr>
+          <td>{{ p.proposal_number }}</td>
+          <td>{{ p.customer.legal_name }}</td>
+          <td><span class="badge text-bg-secondary">{{ p.status }}</span></td>
+          <td>R$ {{ '%.2f'|format(p.total_amount) }}</td>
+          <td>{{ p.version }}</td>
+          <td>
+            <div class="d-flex gap-2 flex-wrap">
+              <a href="/proposals/{{ p.id }}" class="btn btn-sm btn-outline-dark">Abrir</a>
+              <a href="/proposals/{{ p.id }}/edit" class="btn btn-sm btn-outline-primary">Editar</a>
+              <form method="post" action="/proposals/{{ p.id }}/delete" onsubmit="return confirm('Deseja excluir esta proposta?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

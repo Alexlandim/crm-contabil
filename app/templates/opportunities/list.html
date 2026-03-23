@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Oportunidades</h2>
+  <a href="/opportunities/new" class="btn btn-dark">Nova oportunidade</a>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Cliente</th>
+          <th>Etapa</th>
+          <th>Responsável</th>
+          <th>Valor</th>
+          <th>Prob.</th>
+          <th style="width: 180px;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in opportunities %}
+        <tr>
+          <td>{{ item.title }}</td>
+          <td>{{ item.customer.legal_name }}</td>
+          <td><span class="badge text-bg-{{ item.stage.color }}">{{ item.stage.name }}</span></td>
+          <td>{{ item.owner.full_name }}</td>
+          <td>R$ {{ '%.2f'|format(item.estimated_value) }}</td>
+          <td>{{ item.close_probability }}%</td>
+          <td>
+            <div class="d-flex gap-2">
+              <a href="/opportunities/{{ item.id }}/edit" class="btn btn-sm btn-outline-primary">Editar</a>
+              <form method="post" action="/opportunities/{{ item.id }}/delete" onsubmit="return confirm('Deseja excluir esta oportunidade?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

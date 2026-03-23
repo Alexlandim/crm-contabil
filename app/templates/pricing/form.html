@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Tabela de preços</h2>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header"><strong>Parâmetros gerais</strong></div>
+  <div class="card-body">
+    <form method="post" action="/pricing/settings">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Valor por nota fiscal</label>
+          <input
+            name="price_per_invoice"
+            type="number"
+            step="0.01"
+            class="form-control"
+            value="{{ pricing_settings.price_per_invoice }}"
+            required
+          >
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Valor por funcionário</label>
+          <input
+            name="price_per_employee"
+            type="number"
+            step="0.01"
+            class="form-control"
+            value="{{ pricing_settings.price_per_employee }}"
+            required
+          >
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-dark w-100">Salvar parâmetros</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header"><strong>Regimes tributários</strong></div>
+      <div class="card-body">
+        <form method="post" action="/pricing/tax-regimes/new" class="row g-2 mb-3">
+          <div class="col-md-7">
+            <input name="name" class="form-control" placeholder="Nome do regime" required>
+          </div>
+          <div class="col-md-3">
+            <input name="amount" type="number" step="0.01" class="form-control" placeholder="Valor" required>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-dark w-100">Adicionar</button>
+          </div>
+        </form>
+
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Regime</th>
+              <th>Valor</th>
+              <th style="width: 180px;">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in tax_regimes %}
+            <tr>
+              <td>
+                <form method="post" action="/pricing/tax-regimes/{{ item.id }}/edit" class="d-flex gap-2">
+                  <input name="name" class="form-control" value="{{ item.name }}">
+              </td>
+              <td>
+                  <input name="amount" type="number" step="0.01" class="form-control" value="{{ item.amount }}">
+              </td>
+              <td>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-primary">Salvar</button>
+                </form>
+                    <form method="post" action="/pricing/tax-regimes/{{ item.id }}/delete" onsubmit="return confirm('Excluir regime tributário?');">
+                      <button class="btn btn-sm btn-outline-danger">Excluir</button>
+                    </form>
+                  </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header"><strong>Segmentos</strong></div>
+      <div class="card-body">
+        <form method="post" action="/pricing/segments/new" class="row g-2 mb-3">
+          <div class="col-md-7">
+            <input name="name" class="form-control" placeholder="Nome do segmento" required>
+          </div>
+          <div class="col-md-3">
+            <input name="amount" type="number" step="0.01" class="form-control" placeholder="Valor" required>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-dark w-100">Adicionar</button>
+          </div>
+        </form>
+
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Segmento</th>
+              <th>Valor</th>
+              <th style="width: 180px;">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in segments %}
+            <tr>
+              <td>
+                <form method="post" action="/pricing/segments/{{ item.id }}/edit" class="d-flex gap-2">
+                  <input name="name" class="form-control" value="{{ item.name }}">
+              </td>
+              <td>
+                  <input name="amount" type="number" step="0.01" class="form-control" value="{{ item.amount }}">
+              </td>
+              <td>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-primary">Salvar</button>
+                </form>
+                    <form method="post" action="/pricing/segments/{{ item.id }}/delete" onsubmit="return confirm('Excluir segmento?');">
+                      <button class="btn btn-sm btn-outline-danger">Excluir</button>
+                    </form>
+                  </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

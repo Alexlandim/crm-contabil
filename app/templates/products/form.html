@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">{% if product %}Editar produto/serviço{% else %}Novo produto/serviço{% endif %}</h2>
+
+<form method="post" action="{{ action_url }}" class="card shadow-sm p-4">
+  <div class="row g-3">
+    <div class="col-md-3">
+      <label class="form-label">Código</label>
+      <input name="internal_code" class="form-control" required value="{{ product.internal_code if product else '' }}">
+    </div>
+
+    <div class="col-md-9">
+      <label class="form-label">Nome</label>
+      <input name="name" class="form-control" required value="{{ product.name if product else '' }}">
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Categoria</label>
+      <input name="category" class="form-control" value="{{ product.category if product else '' }}">
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Unidade</label>
+      <input name="unit" class="form-control" value="{{ product.unit if product else 'UN' }}">
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Preço base</label>
+      <input name="base_price" type="number" step="0.01" class="form-control" value="{{ product.base_price if product else 0 }}">
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Custo</label>
+      <input name="estimated_cost" type="number" step="0.01" class="form-control" value="{{ product.estimated_cost if product else 0 }}">
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Desc. máx (%)</label>
+      <input name="max_discount_percent" type="number" step="0.01" class="form-control" value="{{ product.max_discount_percent if product else 0 }}">
+    </div>
+
+    <div class="col-md-12">
+      <label class="form-label">Descrição comercial</label>
+      <textarea name="commercial_description" class="form-control" rows="3">{{ product.commercial_description if product else '' }}</textarea>
+    </div>
+
+    <div class="col-md-12">
+      <label class="form-label">Descrição técnica</label>
+      <textarea name="technical_description" class="form-control" rows="3">{{ product.technical_description if product else '' }}</textarea>
+    </div>
+
+    <div class="col-md-12">
+      <label class="form-label">Observações</label>
+      <textarea name="notes" class="form-control" rows="3">{{ product.notes if product else '' }}</textarea>
+    </div>
+  </div>
+
+  <div class="mt-4 d-flex gap-2">
+    <button class="btn btn-dark">Salvar</button>
+    <a href="/products/" class="btn btn-outline-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

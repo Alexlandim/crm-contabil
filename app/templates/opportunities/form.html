@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">{% if opportunity %}Editar oportunidade{% else %}Nova oportunidade{% endif %}</h2>
+
+<form method="post" action="{{ action_url }}" class="card shadow-sm p-4">
+  <div class="row g-3">
+    <div class="col-md-12">
+      <label class="form-label">Título</label>
+      <input name="title" class="form-control" required value="{{ opportunity.title if opportunity else '' }}">
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Cliente</label>
+      <select name="customer_id" class="form-select">
+        {% for c in customers %}
+        <option value="{{ c.id }}" {% if opportunity and opportunity.customer_id == c.id %}selected{% endif %}>{{ c.legal_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Etapa</label>
+      <select name="stage_id" class="form-select">
+        {% for s in stages %}
+        <option value="{{ s.id }}" {% if opportunity and opportunity.stage_id == s.id %}selected{% endif %}>{{ s.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Responsável</label>
+      <select name="owner_id" class="form-select">
+        {% for u in users %}
+        <option value="{{ u.id }}" {% if opportunity and opportunity.owner_id == u.id %}selected{% endif %}>{{ u.full_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Valor estimado</label>
+      <input name="estimated_value" type="number" step="0.01" class="form-control" value="{{ opportunity.estimated_value if opportunity else 0 }}">
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Probabilidade</label>
+      <input name="close_probability" type="number" class="form-control" value="{{ opportunity.close_probability if opportunity else 10 }}">
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Origem</label>
+      <input name="source" class="form-control" value="{{ opportunity.source if opportunity else '' }}">
+    </div>
+
+    <div class="col-md-12">
+      <label class="form-label">Observações</label>
+      <textarea name="notes" class="form-control" rows="4">{{ opportunity.notes if opportunity else '' }}</textarea>
+    </div>
+  </div>
+
+  <div class="mt-4 d-flex gap-2">
+    <button class="btn btn-dark">Salvar</button>
+    <a href="/opportunities/" class="btn btn-outline-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

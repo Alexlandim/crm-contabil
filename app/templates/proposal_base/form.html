@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="mb-1">{% if template %}Editar Base da Proposta{% else %}Nova Base da Proposta{% endif %}</h2>
+    <p class="text-muted mb-0">Preencha os textos padrão que serão reaproveitados nas propostas emitidas.</p>
+  </div>
+  <a href="/proposal-base/" class="btn btn-outline-secondary">Voltar</a>
+</div>
+
+<form method="post" action="{{ action_url }}">
+  <div class="card shadow-sm mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <strong>Informações gerais</strong>
+      {% if not template %}
+      <button type="button" class="btn btn-sm btn-outline-primary" onclick="preencherModeloPadrao()">Preencher modelo sugerido</button>
+      {% endif %}
+    </div>
+    <div class="card-body row g-3">
+      <div class="col-md-8">
+        <label class="form-label">Nome da base</label>
+        <input
+          name="name"
+          class="form-control"
+          value="{{ template.name if template else 'Base comercial padrão' }}"
+          required
+        >
+      </div>
+
+      <div class="col-md-4 d-flex align-items-end">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="true"
+            id="is_active"
+            name="is_active"
+            {% if template and template.is_active %}checked{% endif %}
+          >
+          <label class="form-check-label" for="is_active">
+            Definir como base ativa
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-header">
+      <strong>Conteúdo padrão da proposta</strong>
+    </div>
+    <div class="card-body row g-3">
+
+      <div class="col-12">
+        <label class="form-label">Apresentação</label>
+        <textarea id="presentation" name="presentation" class="form-control" rows="6" placeholder="Apresentação institucional da empresa">{{ template.presentation if template else defaults.presentation }}</textarea>
+        <div class="form-text">Explique quem é a empresa, como atua e qual valor entrega ao cliente.</div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Metodologia</label>
+        <textarea id="methodology" name="methodology" class="form-control" rows="6" placeholder="Fluxo de atendimento, implantação, rotina e suporte">{{ template.methodology if template else defaults.methodology }}</textarea>
+        <div class="form-text">Descreva a forma de trabalho, etapas e padrão de acompanhamento.</div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Descrição dos serviços</label>
+        <textarea id="services_description" name="services_description" class="form-control" rows="8" placeholder="Escopo principal da proposta">{{ template.services_description if template else defaults.services_description }}</textarea>
+        <div class="form-text">Traga um texto-base para o escopo recorrente. Os itens comerciais continuam sendo puxados da proposta.</div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Serviços extras</label>
+        <textarea id="extra_services" name="extra_services" class="form-control" rows="6" placeholder="Demandas extraordinárias ou fora do escopo">{{ template.extra_services if template else defaults.extra_services }}</textarea>
+        <div class="form-text">Liste as situações que exigem orçamento à parte.</div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Condições gerais / cláusulas padrão</label>
+        <textarea id="general_conditions" name="general_conditions" class="form-control" rows="8" placeholder="Condições comerciais e premissas">{{ template.general_conditions if template else defaults.general_conditions }}</textarea>
+        <div class="form-text">Use este espaço para premissas, limitações de escopo e possibilidade de revisão comercial.</div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Fechamento</label>
+        <textarea id="closing" name="closing" class="form-control" rows="5" placeholder="Encerramento institucional">{{ template.closing if template else defaults.closing }}</textarea>
+        <div class="form-text">Mensagem final para reforçar disponibilidade e valor percebido.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <button class="btn btn-dark">Salvar base</button>
+    <a href="/proposal-base/" class="btn btn-outline-secondary">Cancelar</a>
+  </div>
+</form>
+
+<script>
+  const defaults = {
+    presentation: {{ defaults.presentation|tojson }},
+    methodology: {{ defaults.methodology|tojson }},
+    services_description: {{ defaults.services_description|tojson }},
+    extra_services: {{ defaults.extra_services|tojson }},
+    general_conditions: {{ defaults.general_conditions|tojson }},
+    closing: {{ defaults.closing|tojson }}
+  };
+
+  function preencherModeloPadrao() {
+    document.getElementById('presentation').value = defaults.presentation;
+    document.getElementById('methodology').value = defaults.methodology;
+    document.getElementById('services_description').value = defaults.services_description;
+    document.getElementById('extra_services').value = defaults.extra_services;
+    document.getElementById('general_conditions').value = defaults.general_conditions;
+    document.getElementById('closing').value = defaults.closing;
+  }
+</script>
+
+{% endblock %}

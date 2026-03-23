@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Configurações da empresa</h2>
+<form method="post" class="card shadow-sm p-4">
+  <div class="row g-3">
+    <div class="col-md-6"><label class="form-label">Razão social</label><input name="company_name" class="form-control" value="{{ settings.company_name }}"></div>
+    <div class="col-md-6"><label class="form-label">CNPJ</label><input name="company_cnpj" class="form-control" value="{{ settings.company_cnpj }}"></div>
+    <div class="col-md-4"><label class="form-label">E-mail</label><input name="company_email" class="form-control" value="{{ settings.company_email }}"></div>
+    <div class="col-md-4"><label class="form-label">Telefone</label><input name="company_phone" class="form-control" value="{{ settings.company_phone }}"></div>
+    <div class="col-md-4"><label class="form-label">Site</label><input name="company_site" class="form-control" value="{{ settings.company_site }}"></div>
+    <div class="col-md-12"><label class="form-label">Endereço</label><input name="company_address" class="form-control" value="{{ settings.company_address }}"></div>
+    <div class="col-md-4"><label class="form-label">Validade padrão</label><input name="default_validity_days" type="number" class="form-control" value="{{ settings.default_validity_days }}"></div>
+    <div class="col-md-4"><label class="form-label">Prefixo da proposta</label><input name="proposal_number_prefix" class="form-control" value="{{ settings.proposal_number_prefix }}"></div>
+    <div class="col-md-12"><label class="form-label">Rodapé padrão</label><textarea name="proposal_footer" class="form-control" rows="4">{{ settings.proposal_footer }}</textarea></div>
+  </div>
+  <div class="mt-4"><button class="btn btn-dark">Salvar</button></div>
+</form>
+{% endblock %}

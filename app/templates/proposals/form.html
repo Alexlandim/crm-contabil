@@ -1,0 +1,1077 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  .proposal-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .proposal-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    padding: 2rem;
+    color: #ffffff;
+    background:
+      radial-gradient(circle at top right, rgba(96, 165, 250, 0.20), transparent 28%),
+      radial-gradient(circle at bottom left, rgba(45, 212, 191, 0.16), transparent 30%),
+      linear-gradient(135deg, #0f172a 0%, #142952 52%, #1d4ed8 100%);
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
+  }
+
+  .proposal-hero::after {
+    content: "";
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .proposal-hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .proposal-hero-title {
+    margin: 0 0 0.45rem 0;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .proposal-hero-subtitle {
+    margin: 0;
+    max-width: 760px;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 1rem;
+  }
+
+  .proposal-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 700;
+    white-space: nowrap;
+    backdrop-filter: blur(10px);
+  }
+
+  .proposal-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 0.8fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .proposal-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .proposal-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .crm-card {
+    background: #ffffff;
+    border: 1px solid #e8edf5;
+    border-radius: 22px;
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+  }
+
+  .crm-card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #eef2f7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .crm-card-title {
+    margin: 0;
+    font-size: 1.03rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .crm-card-subtitle {
+    margin: 0.2rem 0 0 0;
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+
+  .crm-card-body {
+    padding: 1.25rem;
+  }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+  }
+
+  .field-12 { grid-column: span 12; }
+  .field-8 { grid-column: span 8; }
+  .field-6 { grid-column: span 6; }
+  .field-4 { grid-column: span 4; }
+  .field-3 { grid-column: span 3; }
+  .field-2 { grid-column: span 2; }
+  .field-1 { grid-column: span 1; }
+
+  .field-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: #0f172a;
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .field-control,
+  .field-select,
+  .field-textarea {
+    width: 100%;
+    border: 1px solid #dbe3ef;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #0f172a;
+    padding: 0.78rem 0.9rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+  }
+
+  .field-control:focus,
+  .field-select:focus,
+  .field-textarea:focus {
+    outline: none;
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  }
+
+  .field-textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+
+  .pricing-card {
+    background:
+      radial-gradient(circle at top right, rgba(96, 165, 250, 0.12), transparent 30%),
+      linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  }
+
+  .pricing-kicker {
+    margin: 0;
+    color: #1d4ed8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .pricing-value {
+    margin: 0.35rem 0 0 0;
+    color: #0f172a;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .pricing-note {
+    margin: 0.4rem 0 0 0;
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .pricing-status {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  .summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid #eef2f7;
+  }
+
+  .summary-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .summary-label {
+    color: #64748b;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .summary-value {
+    color: #0f172a;
+    font-size: 0.92rem;
+    font-weight: 800;
+    text-align: right;
+  }
+
+  .item-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .soft-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.8rem;
+    border-radius: 999px;
+    background: #eef6ff;
+    color: #1d4ed8;
+    font-size: 0.84rem;
+    font-weight: 700;
+  }
+
+  .btn-modern-primary {
+    border: none;
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+    color: #ffffff;
+    border-radius: 14px;
+    padding: 0.72rem 1rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.20);
+    transition: all 0.2s ease;
+  }
+
+  .btn-modern-primary:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+  }
+
+  .btn-modern-dark {
+    border: none;
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 14px;
+    padding: 0.8rem 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+
+  .btn-modern-dark:hover {
+    background: #111c34;
+    transform: translateY(-1px);
+  }
+
+  .btn-modern-light {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: 1px solid #dbe3ef;
+    background: #ffffff;
+    color: #334155;
+    border-radius: 14px;
+    padding: 0.8rem 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+
+  .btn-modern-light:hover {
+    background: #f8fafc;
+    color: #0f172a;
+  }
+
+  .btn-remove-item {
+    width: 100%;
+    border: 1px solid #fecaca;
+    background: #fff5f5;
+    color: #dc2626;
+    border-radius: 12px;
+    padding: 0.72rem 0.75rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+
+  .btn-remove-item:hover {
+    background: #fee2e2;
+  }
+
+  .proposal-item {
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    border: 1px solid #e6edf6 !important;
+    border-radius: 18px !important;
+    padding: 1rem !important;
+    margin-bottom: 0.9rem !important;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  }
+
+  .proposal-item:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .item-actions {
+    display: flex;
+    align-items: end;
+  }
+
+  .page-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 1200px) {
+    .proposal-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .proposal-hero {
+      padding: 1.35rem;
+    }
+
+    .proposal-hero-title {
+      font-size: 1.6rem;
+    }
+
+    .field-8,
+    .field-6,
+    .field-4,
+    .field-3,
+    .field-2,
+    .field-1 {
+      grid-column: span 12;
+    }
+  }
+</style>
+
+<div class="proposal-page">
+  <section class="proposal-hero">
+    <div class="proposal-hero-content">
+      <div>
+        <h1 class="proposal-hero-title">
+          {% if proposal %}Editar proposta{% else %}Nova proposta{% endif %}
+        </h1>
+        <p class="proposal-hero-subtitle">
+          Monte propostas comerciais com uma apresentação mais executiva, organizada e pronta para negociação com o cliente.
+        </p>
+      </div>
+
+      <div class="proposal-hero-badge">
+        Precificação integrada
+      </div>
+    </div>
+  </section>
+
+  <form method="post" action="{{ action_url }}">
+    <div class="proposal-layout">
+      <div class="proposal-main">
+
+        <div class="crm-card">
+          <div class="crm-card-header">
+            <div>
+              <h3 class="crm-card-title">Dados da proposta</h3>
+              <p class="crm-card-subtitle">Informações principais para emissão e controle comercial.</p>
+            </div>
+          </div>
+          <div class="crm-card-body">
+            <div class="section-grid">
+              <div class="field-4">
+                <label class="field-label">Cliente</label>
+                <select name="customer_id" class="field-select">
+                  {% for c in customers %}
+                  <option value="{{ c.id }}" {% if proposal and proposal.customer_id == c.id %}selected{% endif %}>
+                    {{ c.legal_name }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="field-4">
+                <label class="field-label">Número</label>
+                <input
+                  name="proposal_number"
+                  class="field-control"
+                  value="{{ proposal.proposal_number if proposal else proposal_number }}"
+                >
+              </div>
+
+              <div class="field-2">
+                <label class="field-label">Emissão</label>
+                <input
+                  name="issue_date"
+                  type="date"
+                  class="field-control"
+                  value="{% if proposal %}{{ proposal.issue_date.isoformat() }}{% endif %}"
+                >
+              </div>
+
+              <div class="field-2">
+                <label class="field-label">Validade</label>
+                <input
+                  name="validity_date"
+                  type="date"
+                  class="field-control"
+                  value="{% if proposal %}{{ proposal.validity_date.isoformat() if proposal.validity_date else '' }}{% else %}{{ validity_date.isoformat() }}{% endif %}"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crm-card">
+          <div class="crm-card-header">
+            <div>
+              <h3 class="crm-card-title">Perfil do cliente</h3>
+              <p class="crm-card-subtitle">Parâmetros comerciais utilizados na estrutura da proposta.</p>
+            </div>
+          </div>
+          <div class="crm-card-body">
+            <div class="section-grid">
+              <div class="field-3">
+                <label class="field-label">CNPJ</label>
+                <input
+                  name="cnpj"
+                  class="field-control"
+                  value="{{ proposal.cnpj if proposal else '' }}"
+                >
+              </div>
+
+              <div class="field-3">
+                <label class="field-label">Regime tributário</label>
+                <select name="tax_regime" id="tax_regime" class="field-select pricing-trigger">
+                  <option value="">Selecione</option>
+                  {% for item in pricing_snapshot.tax_regimes %}
+                  <option value="{{ item.name }}" {% if proposal and proposal.tax_regime == item.name %}selected{% endif %}>
+                    {{ item.name }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="field-3">
+                <label class="field-label">Seguimento</label>
+                <select name="business_segment" id="business_segment" class="field-select pricing-trigger">
+                  <option value="">Selecione</option>
+                  {% for item in pricing_snapshot.segments %}
+                  <option value="{{ item.name }}" {% if proposal and proposal.business_segment == item.name %}selected{% endif %}>
+                    {{ item.name }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="field-3">
+                <label class="field-label">Quantidade de funcionários</label>
+                <input
+                  name="employee_count"
+                  id="employee_count"
+                  type="number"
+                  class="field-control pricing-trigger"
+                  value="{{ proposal.employee_count if proposal else 0 }}"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crm-card">
+          <div class="crm-card-header">
+            <div>
+              <h3 class="crm-card-title">Indicadores</h3>
+              <p class="crm-card-subtitle">Informações de base para análise comercial e precificação.</p>
+            </div>
+          </div>
+          <div class="crm-card-body">
+            <div class="section-grid">
+              <div class="field-4">
+                <label class="field-label">Faturamento</label>
+                <input
+                  name="faturamento"
+                  class="field-control"
+                  value="{{ proposal.faturamento if proposal else '' }}"
+                >
+              </div>
+
+              <div class="field-4">
+                <label class="field-label">Média de faturamento mensal</label>
+                <input
+                  name="monthly_revenue_avg"
+                  type="number"
+                  step="0.01"
+                  class="field-control"
+                  value="{{ proposal.monthly_revenue_avg if proposal else 0 }}"
+                >
+              </div>
+
+              <div class="field-4">
+                <label class="field-label">Média de notas fiscais</label>
+                <input
+                  name="monthly_invoices_avg"
+                  id="monthly_invoices_avg"
+                  type="number"
+                  class="field-control pricing-trigger"
+                  value="{{ proposal.monthly_invoices_avg if proposal else 0 }}"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crm-card">
+          <div class="crm-card-header">
+            <div>
+              <h3 class="crm-card-title">Itens da proposta</h3>
+              <p class="crm-card-subtitle">Inclua produtos, quantidades, preços e descontos da negociação.</p>
+            </div>
+
+            <div class="item-toolbar">
+              <div class="soft-counter">
+                <span id="items-count">{{ proposal.items|length if proposal and proposal.items else (products[:3]|length if products else 0) }}</span>
+                <span>itens</span>
+              </div>
+              <button type="button" class="btn-modern-primary" id="add-product-item">
+                Incluir produto
+              </button>
+            </div>
+          </div>
+
+          <div class="crm-card-body">
+            <div id="proposal-items-container">
+
+              {% if proposal and proposal.items %}
+                {% for item in proposal.items %}
+                <div class="proposal-item row g-3 align-items-end">
+                  <div class="col-md-3">
+                    <label class="field-label">Produto</label>
+                    <select name="product_ids" class="field-select product-select">
+                      {% for p in products %}
+                      <option
+                        value="{{ p.id }}"
+                        data-name="{{ p.name }}"
+                        data-price="{{ p.base_price }}"
+                        {% if item.product_id == p.id %}selected{% endif %}
+                      >
+                        {{ p.name }}
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="field-label">Descrição</label>
+                    <input
+                      name="descriptions"
+                      class="field-control description-input"
+                      value="{{ item.description }}"
+                    >
+                  </div>
+
+                  <div class="col-md-1">
+                    <label class="field-label">Quantidade</label>
+                    <input
+                      name="quantities"
+                      type="number"
+                      step="0.01"
+                      class="field-control"
+                      value="{{ item.quantity }}"
+                    >
+                  </div>
+
+                  <div class="col-md-2">
+                    <label class="field-label">Vlr unit.</label>
+                    <input
+                      name="unit_prices"
+                      type="number"
+                      step="0.01"
+                      class="field-control unit-price-input"
+                      value="{{ item.unit_price }}"
+                    >
+                  </div>
+
+                  <div class="col-md-1">
+                    <label class="field-label">Desconto</label>
+                    <input
+                      name="discount_amounts"
+                      type="number"
+                      step="0.01"
+                      class="field-control"
+                      value="{{ item.discount_amount }}"
+                    >
+                  </div>
+
+                  <div class="col-md-1 item-actions">
+                    <button type="button" class="btn-remove-item remove-product-item">
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+                {% endfor %}
+              {% else %}
+                {% for product in products[:3] %}
+                <div class="proposal-item row g-3 align-items-end">
+                  <div class="col-md-3">
+                    <label class="field-label">Produto</label>
+                    <select name="product_ids" class="field-select product-select">
+                      {% for p in products %}
+                      <option
+                        value="{{ p.id }}"
+                        data-name="{{ p.name }}"
+                        data-price="{{ p.base_price }}"
+                        {% if p.id == product.id %}selected{% endif %}
+                      >
+                        {{ p.name }}
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="field-label">Descrição</label>
+                    <input
+                      name="descriptions"
+                      class="field-control description-input"
+                      value="{{ product.name }}"
+                    >
+                  </div>
+
+                  <div class="col-md-1">
+                    <label class="field-label">Quantidade</label>
+                    <input
+                      name="quantities"
+                      type="number"
+                      step="0.01"
+                      class="field-control"
+                      value="1"
+                    >
+                  </div>
+
+                  <div class="col-md-2">
+                    <label class="field-label">Vlr unit.</label>
+                    <input
+                      name="unit_prices"
+                      type="number"
+                      step="0.01"
+                      class="field-control unit-price-input"
+                      value="{{ product.base_price }}"
+                    >
+                  </div>
+
+                  <div class="col-md-1">
+                    <label class="field-label">Desconto</label>
+                    <input
+                      name="discount_amounts"
+                      type="number"
+                      step="0.01"
+                      class="field-control"
+                      value="0"
+                    >
+                  </div>
+
+                  <div class="col-md-1 item-actions">
+                    <button type="button" class="btn-remove-item remove-product-item">
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+                {% endfor %}
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+
+        <div class="crm-card">
+          <div class="crm-card-header">
+            <div>
+              <h3 class="crm-card-title">Condições finais</h3>
+              <p class="crm-card-subtitle">Ajustes finais da proposta e observações de negociação.</p>
+            </div>
+          </div>
+          <div class="crm-card-body">
+            <div class="section-grid">
+              <div class="field-4">
+                <label class="field-label">Desconto global</label>
+                <input
+                  name="global_discount"
+                  type="number"
+                  step="0.01"
+                  class="field-control"
+                  value="{{ proposal.global_discount if proposal else 0 }}"
+                >
+              </div>
+
+              <div class="field-8">
+                <label class="field-label">Observações</label>
+                <textarea name="notes" class="field-textarea">{{ proposal.notes if proposal else '' }}</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-actions">
+          <a href="/proposals/" class="btn-modern-light">Cancelar</a>
+          <button class="btn-modern-dark">Salvar proposta</button>
+        </div>
+      </div>
+
+      <div class="proposal-sidebar">
+        <div class="crm-card pricing-card">
+          <div class="crm-card-body">
+            <p class="pricing-kicker">Preço sugerido</p>
+            <h3 class="pricing-value" id="suggested-price-value">
+              R$ {{ '%.2f'|format(suggested_pricing.suggested_price if suggested_pricing else 0) }}
+            </h3>
+            <p class="pricing-note">
+              Valor consolidado pela tabela de preços com base nos parâmetros informados para este cliente.
+            </p>
+            <div class="pricing-status" id="pricing-status-text">
+              Preencha os parâmetros para atualizar automaticamente.
+            </div>
+          </div>
+        </div>
+
+        <div class="crm-card">
+          <div class="crm-card-header">
+            <div>
+              <h3 class="crm-card-title">Resumo rápido</h3>
+              <p class="crm-card-subtitle">Leitura executiva da proposta em elaboração.</p>
+            </div>
+          </div>
+          <div class="crm-card-body">
+            <div class="summary-list">
+              <div class="summary-item">
+                <div class="summary-label">Cliente</div>
+                <div class="summary-value">
+                  {% if proposal and proposal.customer %}
+                    {{ proposal.customer.legal_name }}
+                  {% else %}
+                    Em definição
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <div class="summary-label">Número</div>
+                <div class="summary-value">
+                  {{ proposal.proposal_number if proposal else proposal_number }}
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <div class="summary-label">Itens cadastrados</div>
+                <div class="summary-value">
+                  <span id="items-count-summary">
+                    {{ proposal.items|length if proposal and proposal.items else (products[:3]|length if products else 0) }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <div class="summary-label">Validade</div>
+                <div class="summary-value">
+                  {% if proposal and proposal.validity_date %}
+                    {{ proposal.validity_date.strftime('%d/%m/%Y') }}
+                  {% else %}
+                    {{ validity_date.strftime('%d/%m/%Y') }}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
+
+<template id="proposal-item-template">
+  <div class="proposal-item row g-3 align-items-end">
+    <div class="col-md-3">
+      <label class="field-label">Produto</label>
+      <select name="product_ids" class="field-select product-select">
+        {% for p in products %}
+        <option value="{{ p.id }}" data-name="{{ p.name }}" data-price="{{ p.base_price }}">
+          {{ p.name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label class="field-label">Descrição</label>
+      <input
+        name="descriptions"
+        class="field-control description-input"
+        value="{% if products %}{{ products[0].name }}{% endif %}"
+      >
+    </div>
+
+    <div class="col-md-1">
+      <label class="field-label">Quantidade</label>
+      <input
+        name="quantities"
+        type="number"
+        step="0.01"
+        class="field-control"
+        value="1"
+      >
+    </div>
+
+    <div class="col-md-2">
+      <label class="field-label">Vlr unit.</label>
+      <input
+        name="unit_prices"
+        type="number"
+        step="0.01"
+        class="field-control unit-price-input"
+        value="{% if products %}{{ products[0].base_price }}{% else %}0{% endif %}"
+      >
+    </div>
+
+    <div class="col-md-1">
+      <label class="field-label">Desconto</label>
+      <input
+        name="discount_amounts"
+        type="number"
+        step="0.01"
+        class="field-control"
+        value="0"
+      >
+    </div>
+
+    <div class="col-md-1 item-actions">
+      <button type="button" class="btn-remove-item remove-product-item">
+        Excluir
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+  function formatCurrencyBRL(value) {
+    const numericValue = Number(value || 0);
+    return numericValue.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+  }
+
+  function updateSuggestedPriceDisplay(suggestedPrice) {
+    const priceElement = document.getElementById("suggested-price-value");
+    if (priceElement) {
+      priceElement.textContent = formatCurrencyBRL(suggestedPrice);
+    }
+  }
+
+  function setPricingStatus(message) {
+    const statusElement = document.getElementById("pricing-status-text");
+    if (statusElement) {
+      statusElement.textContent = message;
+    }
+  }
+
+  async function refreshSuggestedPrice() {
+    const taxRegimeElement = document.getElementById("tax_regime");
+    const businessSegmentElement = document.getElementById("business_segment");
+    const monthlyInvoicesElement = document.getElementById("monthly_invoices_avg");
+    const employeeCountElement = document.getElementById("employee_count");
+
+    if (!taxRegimeElement || !businessSegmentElement || !monthlyInvoicesElement || !employeeCountElement) {
+      return;
+    }
+
+    const taxRegime = taxRegimeElement.value || "";
+    const businessSegment = businessSegmentElement.value || "";
+    const monthlyInvoicesAvg = Number(monthlyInvoicesElement.value || 0);
+    const employeeCount = Number(employeeCountElement.value || 0);
+
+    setPricingStatus("Atualizando preço sugerido...");
+
+    try {
+      const params = new URLSearchParams({
+        tax_regime: taxRegime,
+        business_segment: businessSegment,
+        monthly_invoices_avg: String(monthlyInvoicesAvg),
+        employee_count: String(employeeCount)
+      });
+
+      const response = await fetch(`/proposals/pricing-preview?${params.toString()}`, {
+        method: "GET",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error("Falha ao consultar o preço sugerido.");
+      }
+
+      const data = await response.json();
+      updateSuggestedPriceDisplay(data.suggested_price || 0);
+      setPricingStatus("Preço sugerido atualizado automaticamente.");
+    } catch (error) {
+      setPricingStatus("Não foi possível atualizar automaticamente no momento.");
+    }
+  }
+
+  function updateItemFromSelectedProduct(itemRow) {
+    const productSelect = itemRow.querySelector(".product-select");
+    const descriptionInput = itemRow.querySelector(".description-input");
+    const unitPriceInput = itemRow.querySelector(".unit-price-input");
+
+    if (!productSelect) {
+      return;
+    }
+
+    const selectedOption = productSelect.options[productSelect.selectedIndex];
+    if (!selectedOption) {
+      return;
+    }
+
+    if (descriptionInput && (!descriptionInput.value || descriptionInput.dataset.autoFill !== "manual")) {
+      descriptionInput.value = selectedOption.dataset.name || "";
+      descriptionInput.dataset.autoFill = "auto";
+    }
+
+    if (unitPriceInput) {
+      unitPriceInput.value = selectedOption.dataset.price || 0;
+    }
+  }
+
+  function updateItemsCounter() {
+    const container = document.getElementById("proposal-items-container");
+    const countElement = document.getElementById("items-count");
+    const countSummaryElement = document.getElementById("items-count-summary");
+
+    if (!container) {
+      return;
+    }
+
+    const total = container.querySelectorAll(".proposal-item").length;
+
+    if (countElement) {
+      countElement.textContent = total;
+    }
+
+    if (countSummaryElement) {
+      countSummaryElement.textContent = total;
+    }
+  }
+
+  function bindItemEvents(itemRow) {
+    const removeButton = itemRow.querySelector(".remove-product-item");
+    const productSelect = itemRow.querySelector(".product-select");
+    const descriptionInput = itemRow.querySelector(".description-input");
+
+    if (removeButton) {
+      removeButton.addEventListener("click", function () {
+        const container = document.getElementById("proposal-items-container");
+        const items = container.querySelectorAll(".proposal-item");
+
+        if (items.length > 1) {
+          itemRow.remove();
+          updateItemsCounter();
+        } else {
+          alert("A proposta deve ter pelo menos um item.");
+        }
+      });
+    }
+
+    if (productSelect) {
+      productSelect.addEventListener("change", function () {
+        if (descriptionInput) {
+          descriptionInput.dataset.autoFill = "auto";
+        }
+        updateItemFromSelectedProduct(itemRow);
+      });
+    }
+
+    if (descriptionInput) {
+      descriptionInput.addEventListener("input", function () {
+        descriptionInput.dataset.autoFill = "manual";
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("proposal-items-container");
+    const addButton = document.getElementById("add-product-item");
+    const template = document.getElementById("proposal-item-template");
+    const issueDateInput = document.querySelector('input[name="issue_date"]');
+    const pricingFields = document.querySelectorAll(".pricing-trigger");
+
+    if (issueDateInput && !issueDateInput.value) {
+      issueDateInput.value = new Date().toISOString().slice(0, 10);
+    }
+
+    if (container) {
+      container.querySelectorAll(".proposal-item").forEach(function (itemRow) {
+        bindItemEvents(itemRow);
+      });
+    }
+
+    updateItemsCounter();
+
+    if (addButton && template && container) {
+      addButton.addEventListener("click", function () {
+        const itemHtml = template.innerHTML.trim();
+        container.insertAdjacentHTML("beforeend", itemHtml);
+
+        const items = container.querySelectorAll(".proposal-item");
+        const newItem = items[items.length - 1];
+
+        bindItemEvents(newItem);
+        updateItemFromSelectedProduct(newItem);
+        updateItemsCounter();
+      });
+    }
+
+    pricingFields.forEach(function (field) {
+      field.addEventListener("change", refreshSuggestedPrice);
+      field.addEventListener("input", refreshSuggestedPrice);
+    });
+
+    refreshSuggestedPrice();
+  });
+</script>
+
+{% endblock %}
