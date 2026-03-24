@@ -1,21 +1,14 @@
 from functools import lru_cache
-from pydantic import BaseModel
-from dotenv import load_dotenv
 import os
 
-load_dotenv(override=True)
-
-
-from functools import lru_cache
-from pydantic import BaseModel
 from dotenv import load_dotenv
-import os
+from pydantic import BaseModel
 
 load_dotenv(override=True)
 
 
 class Settings(BaseModel):
-    app_name: str = os.getenv("APP_NAME", "CRM Comercial Pro")
+    app_name: str = os.getenv("APP_NAME", "Contécnica CRM")
     secret_key: str = os.getenv("SECRET_KEY", "change-me")
     database_url: str = os.getenv("DATABASE_URL", "sqlite:///./crm_pro.db")
     session_cookie_name: str = os.getenv("SESSION_COOKIE_NAME", "crmpro_session")
@@ -28,11 +21,6 @@ class Settings(BaseModel):
     company_phone: str = os.getenv("COMPANY_PHONE", "(11) 99999-9999")
     company_site: str = os.getenv("COMPANY_SITE", "www.empresa.com")
     company_address: str = os.getenv("COMPANY_ADDRESS", "Rua Exemplo, 100 - São Paulo/SP")
-
-
-@lru_cache
-def get_settings() -> Settings:
-    return Settings()
 
 
 @lru_cache

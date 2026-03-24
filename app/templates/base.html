@@ -10,24 +10,24 @@
 </head>
 <body>
   <div class="d-flex">
-    <aside class="sidebar bg-dark text-white p-3">
-      <h4 class="mb-4">CRM Pro</h4>
+    <aside class="sidebar p-3">
+      <h4 class="mb-4 sidebar-brand">Contécnica CRM</h4>
 
       <nav class="nav flex-column gap-1">
-        <a class="nav-link text-white" href="/">Dashboard</a>
-        <a class="nav-link text-white" href="/customers/">Clientes</a>
-        <a class="nav-link text-white" href="/products/">Produtos</a>
-        <a class="nav-link text-white" href="/opportunities/">Oportunidades</a>
-        <a class="nav-link text-white" href="/proposals/">Propostas</a>
+        <a class="nav-link sidebar-link" href="/">Dashboard</a>
+        <a class="nav-link sidebar-link" href="/customers/">Clientes</a>
+        <a class="nav-link sidebar-link" href="/products/">Produtos</a>
+        <a class="nav-link sidebar-link" href="/opportunities/">Oportunidades</a>
+        <a class="nav-link sidebar-link" href="/proposals/">Propostas</a>
 
         {% if user and user.role.name == 'admin' %}
-        <a class="nav-link text-white" href="/proposal-base/">Base da Proposta</a>
-        <a class="nav-link text-white" href="/users/">Usuários</a>
-        <a class="nav-link text-white" href="/pricing/">Tabela de preços</a>
+        <a class="nav-link sidebar-link" href="/proposal-base/">Base da Proposta</a>
+        <a class="nav-link sidebar-link" href="/users/">Usuários</a>
+        <a class="nav-link sidebar-link" href="/pricing/">Tabela de preços</a>
         {% endif %}
 
-        <a class="nav-link text-white" href="/settings/">Configurações</a>
-        <a class="nav-link text-danger" href="/logout">Sair</a>
+        <a class="nav-link sidebar-link" href="/settings/">Configurações</a>
+        <a class="nav-link sidebar-link sidebar-logout" href="/logout">Sair</a>
       </nav>
     </aside>
 

@@ -5,6 +5,39 @@ body {
 .sidebar {
   width: 250px;
   min-height: 100vh;
+  background: #c1121f;
+  color: #ffffff;
+}
+
+.sidebar-brand {
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.sidebar-link {
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.sidebar-link:focus {
+  color: #ffffff;
+}
+
+.sidebar-logout {
+  color: #ffe5e5;
+}
+
+.sidebar-logout:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
 }
 
 .content {
@@ -13,7 +46,7 @@ body {
 
 .card-stat {
   border: 0;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 .table thead th {
